@@ -1,5 +1,6 @@
 import React, { useContext, createContext, useState, useEffect } from "react";
-import { auth } from "../firebase";
+import { Firebase, auth } from "../firebase";
+import { mealData } from "../data";
 
 const AuthContext = createContext();
 
@@ -11,8 +12,23 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  const signup = (email, password) => {
-    return auth.createUserWithEmailAndPassword(email, password);
+  const signup = async (email, password) => {
+    return auth.createUserWithEmailAndPassword(email, password).then((cred) => {
+      const userRef = Firebase.firestore().collection("users");
+      userRef.doc(cred.user.uid).set({
+        email: cred.user.email,
+      });
+      userRef
+        .doc(cred.user.uid)
+        .collection("mealData")
+        .doc("meals")
+        .set({
+          meals: mealData,
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
   };
 
   const login = (email, password) => {

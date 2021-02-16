@@ -1,34 +1,81 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { DateTime } from "luxon";
+import { UserRef, MealsRef } from "./currentUser/userData";
+import { Nav } from "./Nav";
+
+import styles from "../css/Dashboard.module.css";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 
 export const Dashboard = () => {
-  const { currentUser, logout } = useAuth();
+  const { currentUser } = useAuth();
+  const [dt, setDt] = useState({});
+  const [meals, setMeals] = useState();
+  const [userData, setUserData] = useState();
+  const [todaysMeals, setTodaysMeals] = useState([]);
 
-  const history = useHistory();
+  // grabbing the user data to use in app
+  useEffect(() => {
+    UserRef(currentUser, setUserData);
+    MealsRef(currentUser, setMeals);
+  }, []);
 
-  const handleLogout = async () => {
-    setError("");
+  useEffect(() => {
+    let dt = DateTime.local();
+    setDt(dt);
+  }, []);
 
-    try {
-      await logout();
-      history.pushState("/login");
-    } catch {
-      setError("Failed to log out");
-    }
-  };
-  const [error, setError] = useState("");
+  useEffect(() => {
+    meals !== undefined &&
+      setTodaysMeals(
+        meals.meals.filter(
+          (item) =>
+            item.day === dt.toLocaleString({ weekday: "long" }).toLowerCase()
+        )
+      );
+  }, [meals]);
 
   return (
-    <main>
-      <h1>Profile</h1>
-      <h2>User: {currentUser.email}</h2>
-      <Link to="/update-profile">Update profile</Link>
-      {error && <h2>{error}</h2>}
+    <>
+      <Nav />
+      <main className={styles.container}>
+        <h1 className={styles.heading}>
+          Hey
+          {userData && userData.name !== undefined
+            ? ` ${userData.name}!`
+            : "there!"}{" "}
+          It's {dt.toLocaleString({ weekday: "long" })}, what you cooking?
+        </h1>
 
-      <div>
-        <button onClick={handleLogout}>Log Out</button>
-      </div>
-    </main>
+        {/* show a menu where you can see all your meals */}
+        {todaysMeals.length > 0 && (
+          <ul className={styles.mealsList}>
+            {todaysMeals.map((meal, i) => {
+              return (
+                <li key={i}>
+                  <Link
+                    className={styles.mealListLink}
+                    to={{ pathname: `/meal/${meal.title}`, state: { meal } }}
+                  >
+                    {meal.title}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+
+        <Link to="/add-meal">
+          <button className={styles.addMealBtn}>
+            <h3>
+              <AiOutlinePlusCircle />
+            </h3>
+          </button>
+        </Link>
+
+        {/* on the front page should be what it does, or maybe what todays meals are */}
+      </main>
+    </>
   );
 };

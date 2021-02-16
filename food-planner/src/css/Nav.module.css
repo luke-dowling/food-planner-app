@@ -1,0 +1,16 @@
+.container {
+  border: 2px solid var(--primary);
+  background-color: rgba(255, 69, 0, 0.6);
+  background-blend-mode: exclusion;
+}
+
+.navListItem {
+  padding: 2px 4px;
+  text-align: center;
+}
+
+.navBtn {
+  margin: 2px 4px;
+  width: 97%;
+  padding: 4px;
+}

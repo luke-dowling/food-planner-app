@@ -1,0 +1,59 @@
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 560px;
+  width: 260px;
+}
+
+.heading {
+  padding: 10px 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: var(--display-4);
+}
+
+.error {
+  color: var(--error);
+  font-weight: 300;
+  font-size: var(--font-size-l);
+}
+
+.formContainer {
+  padding: 4px;
+  border: 1px solid var(--secondary);
+  border-radius: 4px;
+}
+
+.fieldsets {
+  margin: 10px 0;
+  border: none;
+}
+
+.labels {
+  display: block;
+  padding: 8px 0 4px 4px;
+}
+
+.inputs {
+  width: 100%;
+  line-height: 20px;
+}
+
+.btn {
+  font-size: var(--font-size-m);
+  padding: 6px 4px;
+  background-color: var(--secondary);
+  color: snow;
+  border: none;
+  outline: none;
+  margin: 12px auto;
+  width: 100%;
+}
+
+.links {
+  margin-top: 12px;
+  padding: 0 30px;
+  text-align: center;
+}

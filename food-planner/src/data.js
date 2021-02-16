@@ -1,20 +1,44 @@
-export const data = [
+export const mealData = [
   {
-    id: 0,
     title: "Scrambled Tofu",
-    tag: "morning",
-    time: null,
+    time: "morning",
+    type: "main",
+    day: "monday",
   },
   {
-    id: 1,
     title: "Pasta",
-    tag: "midday",
-    time: null,
+    time: "afternoon",
+    type: "main",
+    day: "tuesday",
   },
   {
-    id: 2,
-    title: "Rice",
-    tag: "evening",
-    time: null,
+    title: "Curry",
+    time: "evening",
+    type: "main",
+    day: "wednesday",
+  },
+  {
+    title: "Banana",
+    time: "between-morning-afternoon",
+    type: "snack",
+    day: "thurday",
+  },
+  {
+    title: "Apple",
+    time: "between-afternoon-evening",
+    type: "snack",
+    day: "friday",
+  },
+  {
+    title: "Beer & Burgers",
+    time: "evening",
+    type: "main",
+    day: "saturday",
+  },
+  {
+    title: "Protien Shake",
+    time: "before-morning",
+    type: "snack",
+    day: "sunday",
   },
 ];

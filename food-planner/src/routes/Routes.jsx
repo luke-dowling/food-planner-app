@@ -7,6 +7,9 @@ import { SignUp } from "../components/SignUp";
 import { Login } from "../components/Login";
 import { ForgotPassword } from "../components/ForgotPassword";
 import { UpdateProfile } from "../components/UpadteProfile";
+import { MealEdit } from "../components/MealEdit";
+import { AddMeal } from "../components/AddMeal";
+import { WeeklyPlan } from "../components/WeeklyPlan";
 
 export const Routes = () => {
   return (
@@ -22,6 +25,15 @@ export const Routes = () => {
         </Route>
         <Route path="/forgot-password">
           <ForgotPassword />
+        </Route>
+        <Route path="/meal/:meal">
+          <MealEdit />
+        </Route>
+        <Route path="/add-meal">
+          <AddMeal />
+        </Route>
+        <Route path="/weekly-plan">
+          <WeeklyPlan />
         </Route>
       </Switch>
     </Router>

@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 
+import styles from "../css/Auth.module.css";
+
 export const SignUp = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -33,27 +35,42 @@ export const SignUp = () => {
   };
 
   return (
-    <section>
-      <h2>Sign up</h2>
-      {error && <h1>{error}</h1>}
-      <form onSubmit={handleSubmit}>
-        <fieldset>
-          <label>Email</label>
-          <input type="email" required ref={emailRef} />
+    <section className={styles.container}>
+      <h2 className={styles.heading}>Sign up</h2>
+      {error && <h2 className={styles.error}>{error}</h2>}
+      <form onSubmit={handleSubmit} className={styles.formContainer}>
+        <fieldset className={styles.fieldsets}>
+          <label className={styles.labels}>Email</label>
+          <input
+            className={styles.inputs}
+            type="email"
+            required
+            ref={emailRef}
+          />
         </fieldset>
-        <fieldset>
-          <label>Password</label>
-          <input type="password" required ref={passwordRef} />
+        <fieldset className={styles.fieldsets}>
+          <label className={styles.labels}>Password</label>
+          <input
+            className={styles.inputs}
+            type="password"
+            required
+            ref={passwordRef}
+          />
         </fieldset>
-        <fieldset>
-          <label>Password Confirm</label>
-          <input type="password" required ref={passwordConfirmRef} />
+        <fieldset className={styles.fieldsets}>
+          <label className={styles.labels}>Password Confirm</label>
+          <input
+            className={styles.inputs}
+            type="password"
+            required
+            ref={passwordConfirmRef}
+          />
         </fieldset>
-        <button disabled={loading} type="submit">
+        <button disabled={loading} type="submit" className={styles.btn}>
           Sign up
         </button>
       </form>
-      <div>
+      <div className={styles.links}>
         Already have an account? <Link to="/login">Log In</Link>
       </div>
     </section>

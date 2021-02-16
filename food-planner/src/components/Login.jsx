@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 
+import styles from "../css/Auth.module.css";
+
 export const Login = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -28,25 +30,37 @@ export const Login = () => {
   };
 
   return (
-    <section>
-      <h2>Log In</h2>
-      {error && <h1>{error}</h1>}
+    <section className={styles.container}>
+      <h2 className={styles.heading}>Log In</h2>
+      {error && <h1 className={styles.error}>{error}</h1>}
 
-      <form onSubmit={handleSubmit}>
-        <fieldset>
-          <label>Email</label>
-          <input type="email" required ref={emailRef} />
+      <form onSubmit={handleSubmit} className={styles.formContainer}>
+        <fieldset className={styles.fieldsets}>
+          <label className={styles.labels}>Email</label>
+          <input
+            className={styles.inputs}
+            type="email"
+            required
+            ref={emailRef}
+          />
         </fieldset>
-        <fieldset>
-          <label>Password</label>
-          <input type="password" required ref={passwordRef} />
+        <fieldset className={styles.fieldsets}>
+          <label className={styles.labels}>Password</label>
+          <input
+            className={styles.inputs}
+            type="password"
+            required
+            ref={passwordRef}
+          />
         </fieldset>
-        <button disabled={loading} type="submit">
+        <button disabled={loading} type="submit" className={styles.btn}>
           Log In
         </button>
       </form>
-      <Link to="/forgot-password">Forget Password?</Link>
-      <div>
+      <div className={styles.links}>
+        <Link to="/forgot-password">Forget Password?</Link>
+      </div>
+      <div className={styles.links}>
         Need an account? <Link to="/signup">Sign Up</Link>
       </div>
     </section>

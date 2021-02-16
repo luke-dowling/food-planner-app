@@ -1,8 +1,21 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, useHistory } from "react-router-dom";
+import { Firebase } from "../firebase";
+import { UserRef } from "./currentUser/userData";
 
 export const UpdateProfile = () => {
+  const db = Firebase.firestore().collection("users");
+
+  const [userData, setUserData] = useState();
+
+  // grabbing the user data to use in app
+  useEffect(() => {
+    UserRef(currentUser, setUserData);
+  }, []);
+
+  const nameRef = useRef();
+  const ageRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
@@ -24,15 +37,31 @@ export const UpdateProfile = () => {
     setLoading(true);
     setError("");
 
+    if (nameRef.current.value !== userData.name) {
+      db.doc(currentUser.uid).update({
+        name: nameRef.current.value,
+      });
+    }
+
+    if (ageRef.current.value !== userData.age) {
+      db.doc(currentUser.uid).update({
+        age: ageRef.current.value,
+      });
+    }
+
     if (emailRef.current.value !== currentUser.email) {
       promises.push(updateEmail(emailRef.current.value));
     }
+
     if (passwordRef.current.value) {
       promises.push(updatePassword(passwordRef.current.value));
     }
 
     Promise.all(promises)
       .then(() => {
+        db.doc(currentUser.uid).update({
+          email: emailRef.current.value,
+        });
         history.push("/");
       })
       .catch(() => {
@@ -49,13 +78,24 @@ export const UpdateProfile = () => {
       {error && <h1>{error}</h1>}
       <form onSubmit={handleSubmit}>
         <fieldset>
-          <label>Email</label>
+          <label>Name</label>
           <input
-            type="email"
-            required
-            ref={emailRef}
-            defaultValue={currentUser.email}
+            type="text"
+            ref={nameRef}
+            defaultValue={userData && userData.name}
           />
+        </fieldset>
+        <fieldset>
+          <label>Age</label>
+          <input
+            type="number"
+            ref={ageRef}
+            defaultValue={userData && userData.age}
+          />
+        </fieldset>
+        <fieldset>
+          <label>Email</label>
+          <input type="email" ref={emailRef} defaultValue={currentUser.email} />
         </fieldset>
         <fieldset>
           <label>Password</label>
