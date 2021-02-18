@@ -26,7 +26,9 @@ export const SignUp = () => {
       setError("");
       setLoading(true);
       await signup(emailRef.current.value, passwordRef.current.value);
-      history.push("/");
+      setTimeout(() => {
+        history.push("/");
+      }, 4000);
     } catch {
       setError("Failed to create an account");
     }

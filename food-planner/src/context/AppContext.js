@@ -9,7 +9,6 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     setDatTime(DateTime.local());
-    console.log("The hour has changed", DateTime.local().hour);
   }, [DateTime.local().hour]);
 
   const value = {

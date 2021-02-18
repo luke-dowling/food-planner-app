@@ -39,27 +39,6 @@ export const EditMeal = () => {
             }
           ),
         });
-      history.push("/");
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const deleteMeal = () => {
-    try {
-      Firebase.firestore()
-        .collection("users")
-        .doc(currentUser.uid)
-        .collection("mealsData")
-        .doc(meal.id)
-        .delete()
-        .then(() => {
-          console.log("Document successfully deleted!");
-        })
-        .catch((error) => {
-          console.error("Error removing document: ", error);
-        });
-      history.push("/");
     } catch (err) {
       console.log(err);
     }
@@ -85,9 +64,7 @@ export const EditMeal = () => {
       <h2>Instructions</h2>
       <button>Edit Instructions</button>
 
-      <div>
-        <button onClick={deleteMeal}>Delete this meal</button>
-      </div>
+      <div></div>
     </div>
   );
 };

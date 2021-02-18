@@ -17,7 +17,7 @@ export const UserRef = (currentUser, setState) => {
     });
 };
 
-export const TodaysMealsRef = (currentUser, state, setState, dateTime) => {
+export const TodaysMealsRef = (currentUser, setState, dateTime) => {
   Firebase.firestore()
     .collection("users")
     .doc(currentUser.uid)
@@ -41,7 +41,7 @@ export const TodaysMealsRef = (currentUser, state, setState, dateTime) => {
     });
 };
 
-export const AllMealsRef = (currentUser, state, setState) => {
+export const AllMealsRef = (currentUser, setState) => {
   Firebase.firestore()
     .collection("users")
     .doc(currentUser.uid)

@@ -4,6 +4,7 @@ import { AppContext } from "../context/AppContext";
 import { Link } from "react-router-dom";
 import { UserRef, TodaysMealsRef } from "./currentUser/userData";
 import { Nav } from "./Nav";
+import { Firebase } from "../firebase";
 
 import styles from "../css/Dashboard.module.css";
 import { AiOutlinePlusCircle } from "react-icons/ai";
@@ -14,14 +15,40 @@ export const Dashboard = () => {
 
   const [meals, setMeals] = useState([]);
   const [userData, setUserData] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const deleteMeal = (meal) => {
+    let deleteDocument = Firebase.firestore()
+      .collection("users")
+      .doc(currentUser.uid)
+      .collection("mealsData")
+      .doc(meal.id)
+      .delete()
+      .then(() => {
+        console.log("deleted");
+      });
+    return deleteDocument;
+  };
+
+  const setData = () => {
+    setLoading(true);
+    console.log(loading);
+    setMeals([]);
+    setTimeout(() => {
+      UserRef(currentUser, setUserData);
+      TodaysMealsRef(currentUser, setMeals, dateTime);
+    }, 500);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  };
 
   // grabbing the user data to use in app
   useEffect(() => {
-    UserRef(currentUser, setUserData);
-    TodaysMealsRef(currentUser, meals, setMeals, dateTime);
+    setData();
   }, []);
 
-  //! console.log("why is this run three times? => ", meals);
+  console.log("why is this run three times? => ", meals);
 
   return (
     <>
@@ -33,25 +60,39 @@ export const Dashboard = () => {
             ? ` ${userData.name},`
             : " there,"}
         </h1>
-        {meals && meals.length > 0 ? (
-          <h1 className={styles.heading}>Here's your plan for today!</h1>
-        ) : (
-          <h1>Set up your plan for today by adding a recipe!</h1>
-        )}
+        {loading && <h1>Loading...</h1>}
+
+        {!loading &&
+          (meals.length > 0 ? (
+            <h1 className={styles.heading}>Here's your plan for today!</h1>
+          ) : (
+            <h1>Set up your plan for today by adding a recipe!</h1>
+          ))}
 
         {/* show a menu where you can see all your meals */}
-        {meals.length > 0 && (
+        {!loading && meals.length > 0 && (
           <ul className={styles.mealsList}>
             {meals.map((meal, i) => {
               return (
-                <li key={i}>
-                  <Link
-                    className={styles.mealListLink}
-                    to={{ pathname: `/veiw/${meal.title}`, state: { meal } }}
+                <>
+                  <li key={i}>
+                    <Link
+                      className={styles.mealListLink}
+                      to={{ pathname: `/veiw/${meal.title}`, state: { meal } }}
+                    >
+                      {meal.title}
+                    </Link>
+                  </li>
+                  <button
+                    id="reset"
+                    onClick={() => {
+                      deleteMeal(meal);
+                      setData();
+                    }}
                   >
-                    {meal.title}
-                  </Link>
-                </li>
+                    <Link to="/">Delete this meal</Link>
+                  </button>
+                </>
               );
             })}
           </ul>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Firebase } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import { useHistory } from "react-router";
+import { Redirect } from "react-router-dom";
 
 export const AddMeal = () => {
   const [title, setTitle] = useState("");
@@ -18,13 +19,16 @@ export const AddMeal = () => {
   const { currentUser } = useAuth();
   const history = useHistory();
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
     const db = Firebase.firestore()
       .collection("users")
       .doc(currentUser.uid)
       .collection("mealsData");
 
     try {
+      console.log("something is happening");
       db.add({
         title,
         day,
@@ -32,11 +36,16 @@ export const AddMeal = () => {
         time,
         ingredients: ingredientsArray,
         instructions: instructionsArray,
-      }).then((docRef) => {
-        //Add the id to the meal to help delete it later
-        db.doc(docRef.id).update({ id: docRef.id });
-      });
-      history.push("/");
+      })
+        .then((docRef) => {
+          console.log("this worked");
+          //Add the id to the meal to help delete it later
+          db.doc(docRef.id).update({ id: docRef.id });
+        })
+        .then(() => {
+          console.log("and this");
+          history.push("/");
+        });
     } catch (err) {
       console.log(err);
     }

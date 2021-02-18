@@ -27,55 +27,34 @@ export const AuthProvider = ({ children }) => {
       userRef.doc(cred.user.uid).set({
         email: cred.user.email,
       });
-      userRef
-        .doc(cred.user.uid)
-        .collection("mealsData")
-        .add(mealOne)
-        .catch((err) => {
-          console.log(err);
-        });
-      userRef
-        .doc(cred.user.uid)
-        .collection("mealsData")
-        .add(mealTwo)
-        .catch((err) => {
-          console.log(err);
-        });
-      userRef
-        .doc(cred.user.uid)
-        .collection("mealsData")
-        .add(mealThree)
-        .catch((err) => {
-          console.log(err);
-        });
-      userRef
-        .doc(cred.user.uid)
-        .collection("mealsData")
-        .add(mealFour)
-        .catch((err) => {
-          console.log(err);
-        });
-      userRef
-        .doc(cred.user.uid)
-        .collection("mealsData")
-        .add(mealFive)
-        .catch((err) => {
-          console.log(err);
-        });
-      userRef
-        .doc(cred.user.uid)
-        .collection("mealsData")
-        .add(mealSix)
-        .catch((err) => {
-          console.log(err);
-        });
-      userRef
-        .doc(cred.user.uid)
-        .collection("mealsData")
-        .add(mealSeven)
-        .catch((err) => {
-          console.log(err);
-        });
+
+      const initialMeals = [
+        mealOne,
+        mealTwo,
+        mealThree,
+        mealFour,
+        mealFive,
+        mealSix,
+        mealSeven,
+      ];
+
+      initialMeals.map((meal) => {
+        userRef
+          .doc(cred.user.uid)
+          .collection("mealsData")
+          .add(meal)
+          .then((docRef) => {
+            console.log(docRef.id);
+            userRef
+              .doc(cred.user.uid)
+              .collection("mealsData")
+              .doc(docRef.id)
+              .update({ id: docRef.id });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
     });
   };
 
