@@ -118,7 +118,7 @@ export const UpdateProfile = () => {
         </button>
       </form>
       <div>
-        <Link to="/">Cancel</Link>
+        <Link to="/profile">Cancel</Link>
       </div>
     </section>
   );

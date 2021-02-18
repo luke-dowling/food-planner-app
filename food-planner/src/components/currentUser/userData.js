@@ -17,19 +17,43 @@ export const UserRef = (currentUser, setState) => {
     });
 };
 
-export const MealsRef = (currentUser, setState) => {
+export const TodaysMealsRef = (currentUser, state, setState, dateTime) => {
   Firebase.firestore()
     .collection("users")
     .doc(currentUser.uid)
-    .collection("mealData")
-    .doc("meals")
+    .collection("mealsData")
+    .where(
+      "day",
+      "==",
+      `${dateTime.toLocaleString({ weekday: "long" }).toLowerCase()}`
+    )
     .get()
-    .then((doc) => {
-      if (doc.exists) {
-        return setState(doc.data());
-      } else {
-        console.log("data doesnt exsist");
-      }
+    .then((querySnapshot) => {
+      const dataArray = [];
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        dataArray.push(doc.data());
+      });
+      setState(dataArray);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+export const AllMealsRef = (currentUser, state, setState) => {
+  Firebase.firestore()
+    .collection("users")
+    .doc(currentUser.uid)
+    .collection("mealsData")
+    .get()
+    .then((querySnapshot) => {
+      const dataArray = [];
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        dataArray.push(doc.data());
+      });
+      setState(dataArray);
     })
     .catch((err) => {
       console.error(err);

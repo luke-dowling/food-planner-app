@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useAuth } from "../context/AuthContext";
+import { AppContext } from "../context/AppContext";
 import { Link } from "react-router-dom";
-import { DateTime } from "luxon";
-import { UserRef, MealsRef } from "./currentUser/userData";
+import { UserRef, TodaysMealsRef } from "./currentUser/userData";
 import { Nav } from "./Nav";
 
 import styles from "../css/Dashboard.module.css";
@@ -10,31 +10,18 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 
 export const Dashboard = () => {
   const { currentUser } = useAuth();
-  const [dt, setDt] = useState({});
-  const [meals, setMeals] = useState();
+  const { dateTime } = useContext(AppContext);
+
+  const [meals, setMeals] = useState([]);
   const [userData, setUserData] = useState();
-  const [todaysMeals, setTodaysMeals] = useState([]);
 
   // grabbing the user data to use in app
   useEffect(() => {
     UserRef(currentUser, setUserData);
-    MealsRef(currentUser, setMeals);
+    TodaysMealsRef(currentUser, meals, setMeals, dateTime);
   }, []);
 
-  useEffect(() => {
-    let dt = DateTime.local();
-    setDt(dt);
-  }, []);
-
-  useEffect(() => {
-    meals !== undefined &&
-      setTodaysMeals(
-        meals.meals.filter(
-          (item) =>
-            item.day === dt.toLocaleString({ weekday: "long" }).toLowerCase()
-        )
-      );
-  }, [meals]);
+  //! console.log("why is this run three times? => ", meals);
 
   return (
     <>
@@ -43,20 +30,24 @@ export const Dashboard = () => {
         <h1 className={styles.heading}>
           Hey
           {userData && userData.name !== undefined
-            ? ` ${userData.name}!`
-            : "there!"}{" "}
-          It's {dt.toLocaleString({ weekday: "long" })}, what you cooking?
+            ? ` ${userData.name},`
+            : " there,"}
         </h1>
+        {meals && meals.length > 0 ? (
+          <h1 className={styles.heading}>Here's your plan for today!</h1>
+        ) : (
+          <h1>Set up your plan for today by adding a recipe!</h1>
+        )}
 
         {/* show a menu where you can see all your meals */}
-        {todaysMeals.length > 0 && (
+        {meals.length > 0 && (
           <ul className={styles.mealsList}>
-            {todaysMeals.map((meal, i) => {
+            {meals.map((meal, i) => {
               return (
                 <li key={i}>
                   <Link
                     className={styles.mealListLink}
-                    to={{ pathname: `/meal/${meal.title}`, state: { meal } }}
+                    to={{ pathname: `/veiw/${meal.title}`, state: { meal } }}
                   >
                     {meal.title}
                   </Link>

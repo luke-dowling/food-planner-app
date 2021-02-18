@@ -1,6 +1,14 @@
 import React, { useContext, createContext, useState, useEffect } from "react";
 import { Firebase, auth } from "../firebase";
-import { mealData } from "../data";
+import {
+  mealOne,
+  mealTwo,
+  mealThree,
+  mealFour,
+  mealFive,
+  mealSix,
+  mealSeven,
+} from "../data";
 
 const AuthContext = createContext();
 
@@ -9,6 +17,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
+  // setting all the user parameters
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
@@ -20,11 +29,50 @@ export const AuthProvider = ({ children }) => {
       });
       userRef
         .doc(cred.user.uid)
-        .collection("mealData")
-        .doc("meals")
-        .set({
-          meals: mealData,
-        })
+        .collection("mealsData")
+        .add(mealOne)
+        .catch((err) => {
+          console.log(err);
+        });
+      userRef
+        .doc(cred.user.uid)
+        .collection("mealsData")
+        .add(mealTwo)
+        .catch((err) => {
+          console.log(err);
+        });
+      userRef
+        .doc(cred.user.uid)
+        .collection("mealsData")
+        .add(mealThree)
+        .catch((err) => {
+          console.log(err);
+        });
+      userRef
+        .doc(cred.user.uid)
+        .collection("mealsData")
+        .add(mealFour)
+        .catch((err) => {
+          console.log(err);
+        });
+      userRef
+        .doc(cred.user.uid)
+        .collection("mealsData")
+        .add(mealFive)
+        .catch((err) => {
+          console.log(err);
+        });
+      userRef
+        .doc(cred.user.uid)
+        .collection("mealsData")
+        .add(mealSix)
+        .catch((err) => {
+          console.log(err);
+        });
+      userRef
+        .doc(cred.user.uid)
+        .collection("mealsData")
+        .add(mealSeven)
         .catch((err) => {
           console.log(err);
         });

@@ -3,11 +3,13 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { Dashboard } from "../components/Dashboard";
 import { PrivateRoute } from "../components/PrivateRoute";
+import { Profile } from "../components/Profile";
 import { SignUp } from "../components/SignUp";
 import { Login } from "../components/Login";
 import { ForgotPassword } from "../components/ForgotPassword";
 import { UpdateProfile } from "../components/UpadteProfile";
-import { MealEdit } from "../components/MealEdit";
+import { VeiwMeal } from "../components/VeiwMeal";
+import { EditMeal } from "../components/EditMeal";
 import { AddMeal } from "../components/AddMeal";
 import { WeeklyPlan } from "../components/WeeklyPlan";
 
@@ -17,6 +19,9 @@ export const Routes = () => {
       <Switch>
         <PrivateRoute exact path="/" component={Dashboard} />
         <PrivateRoute path="/update-profile" component={UpdateProfile} />
+        <Route path="/profile">
+          <Profile />
+        </Route>
         <Route path="/signup">
           <SignUp />
         </Route>
@@ -26,8 +31,11 @@ export const Routes = () => {
         <Route path="/forgot-password">
           <ForgotPassword />
         </Route>
-        <Route path="/meal/:meal">
-          <MealEdit />
+        <Route path="/veiw/:meal">
+          <VeiwMeal />
+        </Route>
+        <Route path="/edit/:meal">
+          <EditMeal />
         </Route>
         <Route path="/add-meal">
           <AddMeal />
