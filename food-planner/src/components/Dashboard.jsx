@@ -23,10 +23,7 @@ export const Dashboard = () => {
       .doc(currentUser.uid)
       .collection("mealsData")
       .doc(meal.id)
-      .delete()
-      .then(() => {
-        console.log("deleted");
-      });
+      .delete();
     return deleteDocument;
   };
 

@@ -12,6 +12,7 @@ import { VeiwMeal } from "../components/VeiwMeal";
 import { EditMeal } from "../components/EditMeal";
 import { AddMeal } from "../components/AddMeal";
 import { WeeklyPlan } from "../components/WeeklyPlan";
+import { WeeklyShop } from "../components/WeeklyShop";
 
 export const Routes = () => {
   return (
@@ -40,8 +41,11 @@ export const Routes = () => {
         <Route path="/add-meal">
           <AddMeal />
         </Route>
-        <Route path="/weekly-plan">
+        <Route path="/weekly-plan" exact>
           <WeeklyPlan />
+        </Route>
+        <Route path="/weekly-shop" exact>
+          <WeeklyShop />
         </Route>
       </Switch>
     </Router>

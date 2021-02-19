@@ -58,8 +58,8 @@ export const Nav = () => {
             </Link>
           </li>
           <li className={styles.navListItem}>
-            <Link to="/profile" className={styles.navListLink}>
-              Profile
+            <Link to="/weekly-shop" className={styles.navListLink}>
+              Weekly Shop
             </Link>
           </li>
         </ul>

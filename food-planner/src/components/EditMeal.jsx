@@ -27,21 +27,64 @@ export const EditMeal = () => {
         .collection("mealsData")
         .doc(meal.id)
         .update({
-          meals: Firebase.firestore().Pd.firebase_.firestore.FieldValue.arrayUnion(
-            {
-              title,
-              day,
-              type,
-              time,
-              ingredients: ingredientsArray,
-              instructions: instructionsArray,
-              id: meal.id,
-            }
-          ),
+          title,
+          day,
+          type,
+          time,
+          ingredients: ingredientsArray,
+          instructions: instructionsArray,
         });
+      history.push("/");
     } catch (err) {
       console.log(err);
     }
+  };
+
+  // basic selects and names
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
+
+  const handleDaySelect = (e) => {
+    setDay(e.target.value);
+  };
+
+  const handleTypeSelect = (e) => {
+    setType(e.target.value);
+  };
+
+  const handleTimeSelect = (e) => {
+    setTime(e.target.value);
+  };
+
+  // modifies the current element in the array
+  const handleArrayChange = (e, state, stateItem, setState) => {
+    console.log(state[e.target.id]);
+    setState([...state], (state[e.target.id][`${stateItem}`] = e.target.value));
+  };
+
+  // add an array element and an input
+  const addArrayElement = (e, state, stateItem, setState) => {
+    e.preventDefault();
+    setState([
+      ...state,
+      {
+        id: state.length,
+        stateItem: "",
+      },
+    ]);
+  };
+
+  // removes an array element and an input
+  const removeArrayElement = (e, id, state, setState) => {
+    e.preventDefault();
+    state.splice(id, 1);
+    state.map((item) => {
+      if (item.id > id) {
+        item.id -= 1;
+      }
+    });
+    setState([...state]);
   };
 
   return (
@@ -57,12 +100,174 @@ export const EditMeal = () => {
         <h6>insert img here</h6>
       )}
 
-      <h2>Information</h2>
-      <button>Edit information</button>
-      <h2>Ingredients</h2>
-      <button>Edit ingredients</button>
-      <h2>Instructions</h2>
-      <button>Edit Instructions</button>
+      <form onSubmit={handleSubmit}>
+        <fieldset>
+          <label>Title</label>
+          <input
+            type="text"
+            onChange={handleTitleChange}
+            value={title}
+            required
+          />
+        </fieldset>
+        <fieldset>
+          <label>Day</label>
+          <select
+            name="days"
+            id="days"
+            onChange={handleDaySelect}
+            defaultValue={meal.day}
+            required
+          >
+            <option value="monday">Monday</option>
+            <option value="tuesday">Tuesday</option>
+            <option value="wednesday">Wednesday</option>
+            <option value="thursday">Thursday</option>
+            <option value="friday">Friday</option>
+            <option value="saturday">Saturday</option>
+            <option value="sunday">Sunday</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <label>Type</label>
+          <select
+            name="types"
+            id="types"
+            onChange={handleTypeSelect}
+            defaultValue={meal.type}
+            required
+          >
+            <option value="main">Main</option>
+            <option value="snack">Snack</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <label>Time</label>
+          {type === "main" ? (
+            <select
+              name="main"
+              id="main"
+              onChange={handleTimeSelect}
+              defaultValue={meal.time}
+              required
+            >
+              <option value="morning">Morning</option>
+              <option value="afternoon">Afternoon</option>
+              <option value="evening">Evening</option>
+            </select>
+          ) : (
+            <select
+              name="snack"
+              id="snack"
+              onChange={handleTimeSelect}
+              required
+            >
+              <option value="before-morning">Before Morning</option>
+              <option value="between-morning-afternoon">
+                Between Morning & Afternoon
+              </option>
+              <option value="between-afternoon-evening">
+                Between Afternoon & Evening
+              </option>
+              <option value="after-evening">After Evening</option>
+            </select>
+          )}
+        </fieldset>
+
+        {ingredientsArray.map((ingredient) => {
+          return (
+            <fieldset key={ingredient.id}>
+              <span>{"-"}</span>
+              <input
+                type="text"
+                id={ingredient.id}
+                value={ingredient.ingredient}
+                onChange={(e) =>
+                  handleArrayChange(
+                    e,
+                    ingredientsArray,
+                    "ingredient",
+                    setIngredientsArray
+                  )
+                }
+              />
+              <button
+                onClick={(e) =>
+                  removeArrayElement(
+                    e,
+                    ingredient.id,
+                    ingredientsArray,
+                    setIngredientsArray
+                  )
+                }
+              >
+                Delete Ingredient
+              </button>
+            </fieldset>
+          );
+        })}
+        <button
+          onClick={(e) => {
+            addArrayElement(
+              e,
+              ingredientsArray,
+              "ingredient",
+              setIngredientsArray
+            );
+          }}
+        >
+          Add Ingredient
+        </button>
+
+        {instructionsArray.map((instruction) => {
+          return (
+            <fieldset key={instruction.id}>
+              <span>{instruction.id}</span>
+              <input
+                type="text"
+                id={instruction.id}
+                value={instruction.instruction}
+                onChange={(e) =>
+                  handleArrayChange(
+                    e,
+                    instructionsArray,
+                    "instruction",
+                    setInstructionsArray
+                  )
+                }
+              />
+              <button
+                onClick={(e) =>
+                  removeArrayElement(
+                    e,
+                    instruction.id,
+                    instructionsArray,
+                    setInstructionsArray
+                  )
+                }
+              >
+                Delete Instruction
+              </button>
+            </fieldset>
+          );
+        })}
+        <button
+          onClick={(e) => {
+            addArrayElement(
+              e,
+              instructionsArray,
+              "instruction",
+              setInstructionsArray
+            );
+          }}
+        >
+          Add Ingredient
+        </button>
+
+        <div>
+          <button type="submit">Update Meal</button>
+        </div>
+      </form>
 
       <div></div>
     </div>
@@ -70,31 +275,6 @@ export const EditMeal = () => {
 };
 
 /*
-
- const handleSubmit = () => {
-   try {
-     Firebase.firestore()
-       .collection("users")
-       .doc(currentUser.uid)
-       .collection("mealData")
-       .doc("meals")
-       .update({
-         meals: Firebase.firestore().Pd.firebase_.firestore.FieldValue.arrayUnion(
-           {
-             title,
-             day,
-             type,
-             time,
-             ingredients: ingredientsArray,
-             instructions,
-           }
-         ),
-       });
-     history.push("/");
-   } catch (err) {
-     console.log(err);
-   }
- };
 
  // basic selects and names
  const handleTitleChange = (e) => {
