@@ -13,6 +13,15 @@ export const Dashboard = () => {
   const { currentUser } = useAuth();
   const { dateTime } = useContext(AppContext);
 
+  const timesOfDay = [
+    "before-morning",
+    "morning",
+    "between-morning-afternoon",
+    "afternoon",
+    "between-afternoon-evening",
+    "evening",
+    "after-evening",
+  ];
   const [meals, setMeals] = useState([]);
   const [userData, setUserData] = useState();
   const [loading, setLoading] = useState(false);
@@ -29,15 +38,14 @@ export const Dashboard = () => {
 
   const setData = () => {
     setLoading(true);
-    console.log(loading);
     setMeals([]);
     setTimeout(() => {
       UserRef(currentUser, setUserData);
       TodaysMealsRef(currentUser, setMeals, dateTime);
-    }, 500);
+    }, 100);
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 500);
   };
 
   // grabbing the user data to use in app
@@ -45,56 +53,76 @@ export const Dashboard = () => {
     setData();
   }, []);
 
-  console.log("why is this run three times? => ", meals);
+  //! console.log("why is this run three times? => ", meals);
 
   return (
     <>
       <Nav />
       <main className={styles.container}>
-        <h1 className={styles.heading}>
-          Hey
-          {userData && userData.name !== undefined
-            ? ` ${userData.name},`
-            : " there,"}
-        </h1>
         {loading && <h1>Loading...</h1>}
-
+        {!loading && (
+          <h1 className={styles.heading}>
+            Hey
+            {userData && userData.name !== undefined
+              ? ` ${userData.name},`
+              : " there,"}
+          </h1>
+        )}
         {!loading &&
           (meals.length > 0 ? (
             <h1 className={styles.heading}>Here's your plan for today!</h1>
           ) : (
-            <h1>Set up your plan for today by adding a recipe!</h1>
+            <h1 className={styles.heading}>
+              Set up your plan for today by adding a recipe!
+            </h1>
           ))}
 
-        {/* show a menu where you can see all your meals */}
-        {!loading && meals.length > 0 && (
-          <ul className={styles.mealsList}>
-            {meals.map((meal, i) => {
-              return (
-                <>
-                  <li key={i}>
-                    <Link
-                      className={styles.mealListLink}
-                      to={{ pathname: `/veiw/${meal.title}`, state: { meal } }}
-                    >
-                      {meal.title}
-                    </Link>
-                  </li>
-                  <button
-                    id="reset"
-                    onClick={() => {
-                      deleteMeal(meal);
-                      setData();
-                    }}
-                  >
-                    <Link to="/">Delete this meal</Link>
-                  </button>
-                </>
-              );
-            })}
-          </ul>
-        )}
-
+        {!loading &&
+          meals.length > 0 &&
+          // we need to see what time of day these things happen first
+          timesOfDay.map((time) => {
+            let hasBeenObsereved = false;
+            return (
+              <React.Fragment>
+                {meals.map((meal, i) => {
+                  if (meal.time === time && !hasBeenObsereved) {
+                    hasBeenObsereved = true;
+                    return (
+                      <div className={styles.mealsList} key={i}>
+                        <h2>{time}</h2>
+                      </div>
+                    );
+                  }
+                })}
+                {meals.map((meal, i) => {
+                  if (meal.time === time) {
+                    return (
+                      <div className={styles.mealsList} key={i}>
+                        <Link
+                          className={styles.mealListLink}
+                          to={{
+                            pathname: `/veiw/${meal.title}`,
+                            state: { meal },
+                          }}
+                        >
+                          {meal.title}
+                        </Link>
+                        <button
+                          id="reset"
+                          onClick={() => {
+                            deleteMeal(meal);
+                            setData();
+                          }}
+                        >
+                          <Link to="/">Delete this meal</Link>
+                        </button>
+                      </div>
+                    );
+                  }
+                })}
+              </React.Fragment>
+            );
+          })}
         <Link to="/add-meal">
           <button className={styles.addMealBtn}>
             <h3>
@@ -102,8 +130,6 @@ export const Dashboard = () => {
             </h3>
           </button>
         </Link>
-
-        {/* on the front page should be what it does, or maybe what todays meals are */}
       </main>
     </>
   );

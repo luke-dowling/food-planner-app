@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 import { AllMealsRef } from "./currentUser/userData";
@@ -12,10 +13,10 @@ export const WeeklyShop = () => {
     setLoading(true);
     setTimeout(() => {
       AllMealsRef(currentUser, setMeals);
-    }, 500);
+    }, 100);
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 500);
   };
 
   useEffect(() => {
@@ -25,6 +26,7 @@ export const WeeklyShop = () => {
   return (
     <main>
       <h1>Weekly Shop</h1>
+      <Link to="/">Home</Link>
 
       {loading ? (
         <h1>Loading...</h1>
@@ -36,7 +38,9 @@ export const WeeklyShop = () => {
                 return (
                   <React.Fragment key={i}>
                     {meal.ingredients.map((ingredient, i) => {
-                      return <li key={i}>{ingredient.ingredient}</li>;
+                      if (ingredient.ingredient.trim()) {
+                        return <li key={i}>{ingredient.ingredient}</li>;
+                      }
                     })}
                   </React.Fragment>
                 );

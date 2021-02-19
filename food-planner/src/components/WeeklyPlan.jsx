@@ -25,10 +25,10 @@ export const WeeklyPlan = () => {
     setLoading(true);
     setTimeout(() => {
       AllMealsRef(currentUser, setMeals);
-    }, 500);
+    }, 100);
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 500);
   };
 
   useEffect(() => {

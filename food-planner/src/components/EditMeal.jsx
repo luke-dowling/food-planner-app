@@ -7,7 +7,6 @@ export const EditMeal = () => {
   //grabing the specific meal information from the link
   const location = useLocation();
   const { meal } = location.state;
-  console.log(meal);
 
   const { currentUser } = useAuth();
   const history = useHistory();
@@ -59,7 +58,6 @@ export const EditMeal = () => {
 
   // modifies the current element in the array
   const handleArrayChange = (e, state, stateItem, setState) => {
-    console.log(state[e.target.id]);
     setState([...state], (state[e.target.id][`${stateItem}`] = e.target.value));
   };
 
@@ -273,138 +271,3 @@ export const EditMeal = () => {
     </div>
   );
 };
-
-/*
-
- // basic selects and names
- const handleTitleChange = (e) => {
-   setTitle(e.target.value);
- };
-
- const handleDaySelect = (e) => {
-   setDay(e.target.value);
- };
-
- const handleTypeSelect = (e) => {
-   setType(e.target.value);
- };
-
- const handleTimeSelect = (e) => {
-   setTime(e.target.value);
- };
-
- // modifies the current element in the array
- const handleIngredientChange = (e) => {
-   setIngredientsArray(
-     [...ingredientsArray],
-     (ingredientsArray[e.target.id].ingredient = e.target.value)
-   );
- };
-
- // add an array element and an input
- const addIngredient = (e) => {
-   e.preventDefault();
-   setIngredientsArray([
-     ...ingredientsArray,
-     {
-       id: ingredientsArray.length,
-       ingredient: "",
-     },
-   ]);
- };
-
- // removes an array element and an input
- const removeIngredient = (e, id) => {
-   e.preventDefault();
-   ingredientsArray.splice(id, 1);
-   ingredientsArray.map((ingredient) => {
-     if (ingredient.id > id) {
-       ingredient.id -= 1;
-       console.log("ingredient", ingredient);
-     }
-   });
-   setIngredientsArray([...ingredientsArray]);
- };
-
- const handleInstructionsChange = (e) => {
-   setInstructions(e.target.value);
- };
-
- return (
-   <form onSubmit={handleSubmit}>
-     <fieldset>
-       <label>Title</label>
-       <input type="text" onChange={handleTitleChange} value={title} required />
-     </fieldset>
-     <fieldset>
-       <label>Day</label>
-       <select name="days" id="days" onChange={handleDaySelect} required>
-         <option value="monday">Monday</option>
-         <option value="tuesday">Tuesday</option>
-         <option value="wednesday">Wednesday</option>
-         <option value="thursday">Thursday</option>
-         <option value="friday">Friday</option>
-         <option value="saturday">Saturday</option>
-         <option value="sunday">Sunday</option>
-       </select>
-     </fieldset>
-     <fieldset>
-       <label>Type</label>
-       <select name="types" id="types" onChange={handleTypeSelect} required>
-         <option value="main">Main</option>
-         <option value="snack">Snack</option>
-       </select>
-     </fieldset>
-     <fieldset>
-       <label>Time</label>
-       {type === "main" ? (
-         <select name="main" id="main" onChange={handleTimeSelect} required>
-           <option value="morning">Morning</option>
-           <option value="afternoon">Afternoon</option>
-           <option value="evening">Evening</option>
-         </select>
-       ) : (
-         <select name="snack" id="snack" onChange={handleTimeSelect} required>
-           <option value="before-morning">Before Morning</option>
-           <option value="between-morning-afternoon">
-             Between Morning & Afternoon
-           </option>
-           <option value="between-afternoon-evening">
-             Between Afternoon & Evening
-           </option>
-           <option value="after-evening">After Evening</option>
-         </select>
-       )}
-     </fieldset>
-     {ingredientsArray.map((ingredient) => {
-       return (
-         <fieldset key={ingredient.id}>
-           <span>{ingredient.id + 1}</span>
-           <input
-             type="text"
-             id={ingredient.id}
-             value={ingredient.ingredient}
-             onChange={handleIngredientChange}
-           />
-           <button onClick={(e) => removeIngredient(e, ingredient.id)}>
-             Delete Ingredient
-           </button>
-         </fieldset>
-       );
-     })}
-     <button onClick={addIngredient}>Add Ingredient</button>
-
-     <fieldset>
-       <textarea
-         name="instructions"
-         id="instructions"
-         placeholder="Add your cooking instructions"
-         onChange={handleInstructionsChange}
-       />
-     </fieldset>
-
-     <button type="submit">Add meal</button>
-   </form>
- );
-
- */

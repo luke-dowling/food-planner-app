@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Firebase } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import { useHistory } from "react-router";
-import { Redirect } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 export const AddMeal = () => {
   const [title, setTitle] = useState("");
@@ -62,6 +62,11 @@ export const AddMeal = () => {
 
   const handleTypeSelect = (e) => {
     setType(e.target.value);
+    if (time === "morning") {
+      setTime("before-morning");
+    } else if (time === "before-morning") {
+      setTime("morning");
+    }
   };
 
   const handleTimeSelect = (e) => {
@@ -131,13 +136,25 @@ export const AddMeal = () => {
       <fieldset>
         <label>Time</label>
         {type === "main" ? (
-          <select name="main" id="main" onChange={handleTimeSelect} required>
+          <select
+            name="main"
+            id="main"
+            onChange={handleTimeSelect}
+            defaultValue={"morning"}
+            required
+          >
             <option value="morning">Morning</option>
             <option value="afternoon">Afternoon</option>
             <option value="evening">Evening</option>
           </select>
         ) : (
-          <select name="snack" id="snack" onChange={handleTimeSelect} required>
+          <select
+            name="snack"
+            id="snack"
+            onChange={handleTimeSelect}
+            defaultValue={"before-morning"}
+            required
+          >
             <option value="before-morning">Before Morning</option>
             <option value="between-morning-afternoon">
               Between Morning & Afternoon
